@@ -7,6 +7,14 @@
    ### Added
       - GitHub Actions workflow to build and publish image to GitHub Container Registry (ghcr.io)
 
+   ### Fixed
+      - Ship a static `/etc/nginx/snippets/php-fpm.conf` so the image works even
+        when the (now-EOL) base image's templating step doesn't substitute
+        `{{PHP_TIMEOUT}}`, which caused `nginx: [emerg] directive
+        "fastcgi_read_timeout" is not terminated by ";"` and nginx restart loop.
+      - Set default `PHP_TIMEOUT=180` (the base image's intended default that
+        was orphaned by a typo'd source path in the upstream cont-init script).
+
 
 ## 3.6.2 2023-07-30 <dave at tiredofit dot ca>
 
