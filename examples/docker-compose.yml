@@ -1,7 +1,7 @@
 services:
 
   osticket-app:
-    image: tiredofit/osticket
+    image: ghcr.io/janprasil/docker-osticket:latest
     container_name: osticket-app
     labels:
       - traefik.enable=true

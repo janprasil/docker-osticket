@@ -8,7 +8,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 ARG OSTICKET_VERSION
 ARG OSTICKET_PLUGINS_VERSION
 
-ENV OSTICKET_VERSION=${OSTICKET_VERSION:-"v1.18"} \
+ENV OSTICKET_VERSION=${OSTICKET_VERSION:-"v1.18.3"} \
     OSTICKET_PLUGINS_VERSION=${OSTICKET_PLUGINS_VERSION:-"develop"} \
     OSTICKET_REPO_URL=${OSTICKET_REPO_URL:-"https://github.com/osticket/osticket"} \
     OSTICKET_PLUGINS_REPO_URL=${OSTICKET_REPO_URL:-"https://github.com/osTicket/osTicket-plugins"} \
@@ -27,8 +27,8 @@ ENV OSTICKET_VERSION=${OSTICKET_VERSION:-"v1.18"} \
     NGINX_SITE_ENABLED=osticket \
     NGINX_WEBROOT=/www/osticket \
     ZABBIX_AGENT_TYPE=classic \
-    IMAGE_NAME="tiredofit/osticket" \
-    IMAGE_REPO_URL="https://github.com/tiredofit/docker-osticket/"
+    IMAGE_NAME="janprasil/docker-osticket" \
+    IMAGE_REPO_URL="https://github.com/janprasil/docker-osticket/"
 
 ### Dependency Installation
 RUN source /assets/functions/00-container && \

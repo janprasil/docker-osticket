@@ -1,3 +1,13 @@
+## 3.7.0 2026-04-27 <prasil.honza at gmail dot com>
+
+   ### Changed
+      - Bump default `OSTICKET_VERSION` to `v1.18.3` (latest stable, released 2026-01-15)
+      - Update `IMAGE_NAME` / `IMAGE_REPO_URL` labels to point at fork (janprasil/docker-osticket)
+
+   ### Added
+      - GitHub Actions workflow to build and publish image to GitHub Container Registry (ghcr.io)
+
+
 ## 3.6.2 2023-07-30 <dave at tiredofit dot ca>
 
    ### Changed
