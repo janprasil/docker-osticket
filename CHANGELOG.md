@@ -14,6 +14,16 @@
         "fastcgi_read_timeout" is not terminated by ";"` and nginx restart loop.
       - Set default `PHP_TIMEOUT=180` (the base image's intended default that
         was orphaned by a typo'd source path in the upstream cont-init script).
+      - Override `/etc/cont-init.d/20-php-fpm` with a fixed version. Upstream
+        had three bugs that broke combined nginx+php-fpm operation:
+          * sourced non-existent `/assets/defaults/10-nginx-php-fpm`
+          * early-exited in the `nginx-php-fpm` standalone-mode branch (the
+            default after `prepare_service`), skipping configuration entirely
+          * called `phpfpm_configure_nginx-php-fpm` which does not exist
+            (the real function is `phpfpm_configure_nginx`)
+        Result of fix: `/etc/nginx/snippets/php-fpm-upstream.conf` is now
+        generated at startup, the `php-fpm-upstream` reference resolves, and
+        nginx can serve requests via the local php-fpm socket.
 
 
 ## 3.6.2 2023-07-30 <dave at tiredofit dot ca>

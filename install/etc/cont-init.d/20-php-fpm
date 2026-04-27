@@ -1,0 +1,38 @@
+#!/command/with-contenv bash
+
+# Fixed replacement for upstream tiredofit/nginx-php-fpm 20-php-fpm cont-init.
+# The upstream script has three bugs that break a combined nginx+php-fpm
+# container (which is what osticket needs):
+#   1. line `source /assets/defaults/10-nginx-php-fpm` references a file that
+#      does not exist (real path is /assets/defaults/20-php-fpm).
+#   2. PHP_FPM_CONTAINER_MODE defaults to "nginx-php-fpm" via prepare_service,
+#      and the case branch for that value calls service_stop + exit 0 BEFORE
+#      php-fpm/nginx is configured. Result: no upstream block, nginx fails.
+#   3. The post-case block calls `phpfpm_configure_nginx-php-fpm`, a function
+#      name that does not exist (real function is `phpfpm_configure_nginx`).
+
+source /assets/functions/00-container
+prepare_service
+PROCESS_NAME="php-fpm"
+
+if var_false "${ENABLE_PHP_FPM}" ; then
+    print_notice "Disabling PHP-FPM Functionality"
+    service_stop 20-php-fpm
+    rm -rf /assets/logrotate/php-fpm*
+    rm -rf /etc/logrotate.d/php-fpm*
+    rm -rf /etc/fluent-bit/conf.d/php*
+    rm -rf /etc/zabbix/*/php*.conf
+    liftoff
+    exit 0
+fi
+
+if [ ! -f "/tmp/.container/container-restart" ] ; then
+    phpfpm_bootstrap
+    phpfpm_configure_server
+    phpfpm_configure_extensions
+    phpfpm_configure_nginx
+    phpfpm_configure_logging
+    if declare -F phpfpm_post_init >/dev/null 2>&1 ; then phpfpm_post_init ; fi
+fi
+
+liftoff
